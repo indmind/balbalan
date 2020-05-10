@@ -1,0 +1,23 @@
+{
+  "name": "paw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "service-worker.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "lint": "eslint . --fix",
+    "serve": "parcel index.html"
+  },
+  "author": "indmind",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-config-google": "^0.14.0",
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "regenerator-runtime": "^0.13.5"
+  }
+}

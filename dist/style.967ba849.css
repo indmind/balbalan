@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Montserrat';
+  src: url(/Montserrat-Regular.8fe9dd7a.ttf);
+}
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+  margin: 1em 0;
+}
+
+nav ul li a {
+  color: #212121;
+}
+
+#body-content {
+  width: 100%;
+  max-width: initial;
+}
+
+.no-shadows {
+  box-shadow: none !important;
+}
+
+/*# sourceMappingURL=/style.967ba849.css.map */
