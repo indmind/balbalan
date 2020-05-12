@@ -21,8 +21,7 @@ class TeamDetail extends HTMLElement {
   }
 
   render() {
-    console.log(this._team)
-    if(!this._team) {
+    if (!this._team) {
       return this.innerHTML = `<h3>Loading</h3>`
     }
 
@@ -45,39 +44,28 @@ class TeamDetail extends HTMLElement {
           <span>${this._team.venue || '-'}</span>
         </div>
         <div class="col s12">
-          <div class="row">
-            <div class="col s12">
-              <ul class="tabs grey lighten-3">
-                <li class="tab col s3"><a class="active" href="#squad-container">Squad</a></li>
-                <li class="tab col s3"><a href="#active-competitions-container">Competitions</a></li>
-              </ul>
-            </div>
-            <div id="squad-container" class="col s12">
-              <table>
-                <thead>
-                  <tr>
-                      <th>Shirt</th>
-                      <th>Name</th>
-                      <th>Pos</th>
-                      <th>Nat</th>
-                  </tr>
-                </thead>
-        
-                <tbody>
-                ${this._team.squad.map((player) => /*html*/`
-                  <tr>
-                    <td>${player.shirtNumber || "-"}</td>
-                    <td>${player.name || "-"}</td>
-                    <td>${player.position || "-"}</td>
-                    <td>${player.nationality || "-"}</td>
-                  </tr>
-                `).join("")}
-                </tbody>
-              </table>
-            </div>
-            <div id="active-competitions-container" class="col s12">Active Competition Here</div>
-          </div>
-          
+          <h4>Squads</h4>
+          <table>
+            <thead>
+              <tr>
+                  <th>Shirt</th>
+                  <th>Name</th>
+                  <th>Pos</th>
+                  <th>Nat</th>
+              </tr>
+            </thead>
+
+            <tbody>
+            ${this._team.squad.map((player) => /*html*/`
+              <tr>
+                <td>${player.shirtNumber || "-"}</td>
+                <td>${player.name || "-"}</td>
+                <td>${player.position || "-"}</td>
+                <td>${player.nationality || "-"}</td>
+              </tr>
+            `).join("")}
+            </tbody>
+          </table>
         </div>
       </div>
     `

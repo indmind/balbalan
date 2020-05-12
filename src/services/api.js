@@ -15,20 +15,14 @@ class ApiService {
         ...opts
       })
 
-      console.log("API::getting response", response)
-
       if (response.ok) {
         return await response.json()
       } else {
         const error = await response.json()
 
-        console.log("API::response not ok", error)
-
         return { error }
       }
     } catch (error) {
-      console.log("API::catch exception", error)
-
       throw error
     }
   }

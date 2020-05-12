@@ -88,12 +88,14 @@
   }
 
   function onTeamClick(team, { target: candidate }) {
-    const target = candidate.closest(".team-item")
+    const target = candidate.closest("team-item")
     const teamId = team.team.id
 
     window.setPage(`team/${teamId}`);
 
     selectedTeam = target
+
+    console.log(selectedTeam)
 
     setTeamDetailData(teamId)
     showTeamDetail()
@@ -135,8 +137,11 @@
     }
 
     teamInfoContainer.classList.remove("hide")
+
     standingsContainer.classList.add("hide")
     standingsContainer.classList.add("transparent")
+
+    setTimeout(() => teamInfoContainer.classList.remove("transparent"), 100);
 
     setTimeout(() => {
       window.scrollTo({
@@ -145,28 +150,33 @@
     }, 100)
   }
 
-  function hideTeamInfo() {
+  function hideTeamInfo(scrollTo) {
     appNavbar.backAction = null
 
+    let delay = 300
+
+    if(window.scrollY > 160) {
+      cardBanner.classList.remove('pre-info-only')
+      delay = 0
+    } else {
+      console.log("with transition")
+      cardBanner.classList.add('with-transition')
+    }
+
     cardBanner.classList.remove('info-only')
-    cardBanner.classList.add('with-transition')
 
     setTimeout(() => {
       cardBanner.classList.remove('pre-info-only')
       cardBanner.classList.remove('with-transition')
 
       standingsContainer.classList.remove("hide")
-      teamInfoContainer.classList.add("hide")
+      teamInfoContainer.classList.add("transparent")
 
-      setTimeout(() => standingsContainer.classList.remove("transparent"), 1)
-
-      if (selectedTeam) {
-        window.scrollTo({
-          top: selectedTeam.offsetTop - 200,
-        })
-      }
-
-    }, 300)
+      setTimeout(() => {
+        teamInfoContainer.classList.add("hide")
+        standingsContainer.classList.remove("transparent")
+      }, 100)
+    }, delay)
   }
 })()
 
