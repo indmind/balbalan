@@ -16,22 +16,16 @@
 
 <body>
   <!-- Navigasi -->
-  <nav class="nav-menu teal accent-4 p3 no-shadows" role="navigation">
-    <div class="nav-wrapper container">
-      <a href="#" class="sidenav-trigger" data-target="nav-mobile">
-          <i class="material-icons teal-text">menu</i>
-      </a>
-      <a href="#" class="brand-logo text-bold" id="logo-container"><b>Balbalan!</b></a>
-
-      <ul class="topnav right hide-on-med-and-down"></ul>
-      <ul class="sidenav" id="nav-mobile"></ul>
-    </div>
-  </nav>
+  <app-navbar></app-navbar>
 
   <!-- Akhir Navigasi -->
   <div class="container" id="body-content"></div>
 
+  <script src="src/services/api.js"></script>
   <script src="lib/js/materialize.min.js"></script>
+  <script src="src/component/nav.js"></script>
+  <script src="src/component/team-item.js"></script>
+  <script src="src/component/team-detail.js"></script>
   <script src="src/js/main.js"></script>
 </body>
 

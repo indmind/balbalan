@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "dicoding-paws",
     "public": ".",
     "ignore": [
       "firebase.json",

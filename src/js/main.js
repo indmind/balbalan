@@ -12,40 +12,20 @@ if ("serviceWorker" in navigator) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  M.Sidenav.init(
-    document.querySelectorAll('.sidenav'),
-  );
+  const page = window.location.hash.substr(1).split("/")[0]
   
-  loadNav();
-
-  loadPage(
-    window.location.hash.substr(1) || 'home',
-  );
-
-  async function loadNav() {
-    const response = await fetch('src/component/nav.html');
-
-    if (!response.ok) return;
-
-    const responseText = await response.text();
-
-    document.querySelectorAll('.topnav, .sidenav').forEach(
-      (element) => element.innerHTML = responseText,
-    );
-
-    document.querySelectorAll('.sidenav a, .topnav a').forEach((element) => {
-      element.addEventListener('click', (event) => {
-        M.Sidenav.getInstance(
-          document.querySelector('.sidenav'),
-        ).close();
-
-        loadPage(
-          event.target.getAttribute('href').substr(1),
-        );
-      });
-    });
-  }
+  loadPage(page || 'home');
 });
+
+function setPage(page) {
+  if (history.pushState) {
+    window.history.pushState(
+      { urlPath: `/#/${page}` },
+      '',
+      `/#/${page}`
+    );
+  }
+}
 
 async function loadPage(page) {
   try {
