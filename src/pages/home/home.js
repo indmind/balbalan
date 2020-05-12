@@ -42,8 +42,8 @@
         }
         break;
       case "team":
-        setTeamInfoData(value)
-        showTeamInfo()
+        setTeamDetailData(value)
+        showTeamDetail()
     }
   }
 
@@ -95,17 +95,18 @@
 
     selectedTeam = target
 
-    setTeamInfoData(teamId)
-
-    showTeamInfo()
+    setTeamDetailData(teamId)
+    showTeamDetail()
 
     document.getElementById("league").innerText = team.team.name
-    // document.querySelector(".card-content .badge").innerHTML = `<i class="material-icons teal-text">star</i>`
   }
 
-  async function setTeamInfoData(teamId) {
+  async function setTeamDetailData(teamId) {
     try {
       const teamDetailElement = document.createElement("team-detail")
+
+      teamInfoContainer.innerHTML = ""
+      teamInfoContainer.appendChild(teamDetailElement)
 
       const team = await api.getTeam(teamId)
 
@@ -114,15 +115,12 @@
       }
 
       teamDetailElement.team = team
-      teamInfoContainer.innerHTML = ""
-
-      teamInfoContainer.appendChild(teamDetailElement)
     } catch (error) {
       handleError(error)
     }
   }
 
-  function showTeamInfo() {
+  function showTeamDetail() {
     appNavbar.backAction = onBackFromTeam
 
     if (window.scrollY < 160) {

@@ -3,9 +3,7 @@ class TeamDetail extends HTMLElement {
     super();
 
     this.styles = /*css*/`
-      .container.team-info {
-        margin-top: 100px;
-      }
+      /* some styling here */
     `
   }
 
@@ -23,6 +21,11 @@ class TeamDetail extends HTMLElement {
   }
 
   render() {
+    console.log(this._team)
+    if(!this._team) {
+      return this.innerHTML = `<h3>Loading</h3>`
+    }
+
     this.innerHTML = /*html*/`
       <style>
         ${this.styles}

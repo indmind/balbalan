@@ -46,7 +46,6 @@ class TeamItem extends HTMLElement {
   }
 
   set team(value) {
-    console.log(value)
     this._team = value;
     this.render();
   }

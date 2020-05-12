@@ -90,7 +90,7 @@ class Navbar extends HTMLElement {
         this.sidenavInstance.close()
 
         this._selectedLeague = target.dataset.value
-        console.log("nav click")
+        
         window.setPage(`league/${this._selectedLeague}`);
 
         if(this._changeEvent) {
