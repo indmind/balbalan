@@ -1,12 +1,12 @@
 class Navbar extends HTMLElement {
   constructor() {
-    super()
+    super();
 
-    this.sidenavInstance = null
-    this._selectedLeague = "2001"
-    this._changeEvent = null
+    this.sidenavInstance = null;
+    this._selectedLeague = '2001';
+    this._changeEvent = null;
 
-    this.styles = /*css*/`
+    this.styles = /* css*/`
       .sidenav {
         z-index: 1001; 
         border-radius: 0 20px 0 0;
@@ -26,7 +26,7 @@ class Navbar extends HTMLElement {
 
       .sidenav-title {
         font-size: 2rem;
-        margin: 0 1rem;
+        margin: 1rem 1rem 0;
       }
 
       .nav-menu {
@@ -56,13 +56,13 @@ class Navbar extends HTMLElement {
         color: #424242;
       }
 
-    `
+    `;
 
-    this.nav = /*html*/`
+    this.nav = /* html*/`
       <li class="hide-on-large-only">
         <div class="user-view">
-          <div class="background teal"></div>
-          <p class="sidenav-title"><b>League</b></p>
+          <div class="background"></div>
+          <p class="sidenav-title grey-text text-darken-4"><b>League</b></p>
           <a href="#email"><span class="white-text email"></span></a>
         </div>
       </li>
@@ -71,62 +71,66 @@ class Navbar extends HTMLElement {
       <li><a class="waves-effect" data-value="2002">Bundesliga</a></li>
       <li><a class="waves-effect" data-value="2021">Premier League</a></li>
       <li><a class="waves-effect" data-value="2014">Primera Division</a></li>
-    `
+    `;
   }
 
   connectedCallback() {
-    this.render()
+    this.render();
 
     this.sidenavInstance = M.Sidenav.init(
-      document.querySelector('.sidenav'),
+        document.querySelector('.sidenav'),
     );
 
-    this.setupClickListeners()
+    this.setupClickListeners();
   }
 
   setupClickListeners() {
     this.querySelectorAll('.sidenav a, .topnav a').forEach((element) => {
-      element.addEventListener('click', ({ target }) => {
-        this.sidenavInstance.close()
+      element.addEventListener('click', ({target}) => {
+        this.sidenavInstance.close();
 
-        this._selectedLeague = target.dataset.value
-        
+        this._selectedLeague = target.dataset.value;
+
         window.setPage(`league/${this._selectedLeague}`);
 
-        if(this._changeEvent) {
-          this._changeEvent(this._selectedLeague)
+        if (this._changeEvent) {
+          this._changeEvent(this._selectedLeague);
         }
-      })
-    })
+      });
+    });
   }
 
   render() {
-    this.innerHTML = /*html*/`
+    this.innerHTML = /* html*/`
       <style>
         ${this.styles}
       </style>
       <nav class="nav-menu teal accent-4 p3 no-shadows" role="navigation">
         <div class="nav-wrapper container">
           
-          ${this._backAction
-            ? `
+          ${this._backAction ?
+            `
               <a href="javascript:void(0)" class="sidenav-btn"">
                 <i class="material-icons teal-text">close</i>
               </a>
-              `
-            : `
-              <a href="javascript:void(0)" class="sidenav-trigger" data-target="nav-mobile">
+              ` :
+            `
+              <a href="javascript:void(0)"
+                class="sidenav-trigger"
+                data-target="nav-mobile">
                 <i class="material-icons teal-text">menu</i>
               </a>
-              `
-          }
-          <a href="#" class="brand-logo text-bold" id="logo-container"><b>Balbalan!</b></a>
+              `}
+
+          <a href="#" class="brand-logo text-bold" id="logo-container">
+            <b>Balbalan!</b>
+          </a>
 
           <ul class="topnav right hide-on-med-and-down">${this.nav}</ul>
-          <ul class="sidenav no-shadows" id="nav-mobile">${this.nav}</ul>
+          <ul class="sidenav" id="nav-mobile">${this.nav}</ul>
         </div>
       </nav>
-    `
+    `;
   }
 
   set backAction(action) {
@@ -135,15 +139,15 @@ class Navbar extends HTMLElement {
 
     if (!action) {
       this.sidenavInstance = M.Sidenav.init(
-        this.querySelector('.sidenav'),
+          this.querySelector('.sidenav'),
       );
 
-      this.setupClickListeners()
-      return
+      this.setupClickListeners();
+      return;
     }
 
 
-    this.querySelector('.sidenav-btn').addEventListener("click", action)
+    this.querySelector('.sidenav-btn').addEventListener('click', action);
   }
 
   set onchange(event) {
@@ -151,4 +155,4 @@ class Navbar extends HTMLElement {
   }
 }
 
-customElements.define("app-navbar", Navbar)
+customElements.define('app-navbar', Navbar);

@@ -2,9 +2,9 @@ class TeamItem extends HTMLElement {
   constructor() {
     super();
 
-    this._team = {}
+    this._team = {};
 
-    this.styles = /*css*/`
+    this.styles = /* css*/`
       span.stat:not(.badge) {
         margin-right: 0.5em;
       }
@@ -42,7 +42,7 @@ class TeamItem extends HTMLElement {
       .team-item .team-item-content {
         padding-left: 1em;
       }
-    `
+    `;
   }
 
   set team(value) {
@@ -51,19 +51,19 @@ class TeamItem extends HTMLElement {
   }
 
   connectedCallback() {
-    this.render()
+    this.render();
   }
 
   render() {
-    let stand_color = "grey darken-2"
+    let standColor = 'grey darken-2';
 
-    switch(this._team.position) {
-      case 1: stand_color = "orange darken-1"; break;
-      case 2: stand_color = "blue-grey lighten-1"; break;
-      case 3: stand_color = "brown lighten-1"; break;
+    switch (this._team.position) {
+      case 1: standColor = 'orange darken-1'; break;
+      case 2: standColor = 'blue-grey lighten-1'; break;
+      case 3: standColor = 'brown lighten-1'; break;
     }
 
-    this.innerHTML = /*html*/`
+    this.innerHTML = /* html*/`
       <style>
         ${this.styles}
       </style>
@@ -74,7 +74,9 @@ class TeamItem extends HTMLElement {
             alt="${this._team.team.name} Logo"
           >
           <div class="team-item-content">
-            <span class="badge ${stand_color} white-text">${this._team.position}</span>
+            <span class="badge ${standColor} white-text">
+              ${this._team.position}
+            </span>
             <span>${this._team.team.name}d</span>
             <hr>
             <div>
@@ -94,8 +96,8 @@ class TeamItem extends HTMLElement {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 }
 
-customElements.define("team-item", TeamItem)
+customElements.define('team-item', TeamItem);

@@ -1,28 +1,29 @@
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
     try {
-      await navigator.serviceWorker.register("/service-worker.js")
-      console.log("Pendaftaran sw berhasil")
+      await navigator.serviceWorker.register('/service-worker.js');
+      console.log('Pendaftaran sw berhasil');
     } catch (e) {
-      console.log("Pendaftaran sw gagal")
+      console.log('Pendaftaran sw gagal');
     }
-  })
+  });
 } else {
-  console.log("sw tidak didukung")
+  console.log('sw tidak didukung');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const page = window.location.hash.substr(1).split("/")[0]
-  
+  const page = window.location.hash.substr(1).split('/')[0];
+
   loadPage(page || 'home');
 });
 
+// eslint-disable-next-line no-unused-vars
 function setPage(page) {
   if (history.pushState) {
     window.history.pushState(
-      { urlPath: `/#/${page}` },
-      '',
-      `/#/${page}`
+        {urlPath: `/#/${page}`},
+        '',
+        `/#/${page}`,
     );
   }
 }
@@ -61,12 +62,12 @@ async function loadPage(page) {
         content.innerHTML = await response.text();
       } else {
         content.innerHTML = await fetch('src/pages/404.html').then(
-          (response) => response.text(),
+            (response) => response.text(),
         );
       }
     } catch (e) {
       content.innerHTML = await fetch('src/pages/404.html').then(
-        (response) => response.text(),
+          (response) => response.text(),
       );
     }
   }
