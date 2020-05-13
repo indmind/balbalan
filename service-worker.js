@@ -1,5 +1,5 @@
 const NAME = 'firstpwa';
-const VERSION = 1;
+const VERSION = 2;
 
 const CACHE_NAME = `${NAME}-${VERSION}`;
 
@@ -30,19 +30,14 @@ const images = [
 ].map((image) => `/assets/images/${image}`);
 
 const icons = [
-  'android-icon-192x192-dunplab-manifest-2212.png',
-  'apple-icon-180x180-dunplab-manifest-2212.png',
-  'apple-icon-152x152-dunplab-manifest-2212.png',
-  'apple-icon-144x144-dunplab-manifest-2212.png',
-  'apple-icon-120x120-dunplab-manifest-2212.png',
-  'apple-icon-114x114-dunplab-manifest-2212.png',
-  'favicon-96x96-dunplab-manifest-2212.png',
-  'apple-icon-76x76-dunplab-manifest-2212.png',
-  'apple-icon-72x72-dunplab-manifest-2212.png',
-  'apple-icon-60x60-dunplab-manifest-2212.png',
-  'apple-icon-57x57-dunplab-manifest-2212.png',
-  'favicon-32x32-dunplab-manifest-2212.png',
-  'favicon-16x16-dunplab-manifest-2212.png',
+  'icon-72x72.png',
+  'icon-96x96.png',
+  'icon-128x128.png',
+  'icon-144x144.png',
+  'icon-152x152.png',
+  'icon-192x192.png',
+  'icon-384x384.png',
+  'icon-512x512.png',
 ].map((icon) => `/assets/images/icons/${icon}`);
 
 const fonts = [
@@ -79,9 +74,9 @@ const urlsToCache = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-      caches.open(CACHE_NAME).then(
-          (cache) => cache.addAll(urlsToCache),
-      ),
+    caches.open(CACHE_NAME).then(
+      (cache) => cache.addAll(urlsToCache),
+    ),
   );
 });
 
@@ -96,53 +91,53 @@ self.addEventListener('fetch', (event) => {
   if (event.request.url.includes(API_ENDPOINT)) {
     // Stale While Revalidate
     event.respondWith(
-        caches.open(CACHE_NAME).then((cache) =>
-          cache.match(event.request).then((response) => {
-            const fetchResponse = fetch(event.request).then((netResponse) => {
-              if (netResponse.ok) {
-                cache.put(event.request, netResponse.clone());
-              }
+      caches.open(CACHE_NAME).then((cache) =>
+        cache.match(event.request).then((response) => {
+          const fetchResponse = fetch(event.request).then((netResponse) => {
+            if (netResponse.ok) {
+              cache.put(event.request, netResponse.clone());
+            }
 
-              return netResponse;
-            });
+            return netResponse;
+          });
 
-            return response || fetchResponse;
-          }),
-        ),
+          return response || fetchResponse;
+        }),
+      ),
     );
   } else {
     // Cache First (Cache Fallback to Network)
     event.respondWith(
-        caches.match(event.request, {
-          ignoreSearch: true,
-          ignoreVary: true,
-        }).then(
-            (response) => {
-              if (response) return response;
+      caches.match(event.request, {
+        ignoreSearch: true,
+        ignoreVary: true,
+      }).then(
+        (response) => {
+          if (response) return response;
 
-              console.log('not using cache', event.request.url);
+          console.log('not using cache', event.request.url);
 
-              return caches.open(CACHE_NAME).then(
-                  (cache) => fetch(event.request).then((netResponse) => {
-                    cache.put(event.request, netResponse.clone());
-                    return netResponse;
-                  }),
-              );
-            },
-        ),
+          return caches.open(CACHE_NAME).then(
+            (cache) => fetch(event.request).then((netResponse) => {
+              cache.put(event.request, netResponse.clone());
+              return netResponse;
+            }),
+          );
+        },
+      ),
     );
   }
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-      caches.keys().then((cacheNames) => Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheName.includes(NAME) && cacheName != CACHE_NAME) {
-              console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
-              return caches.delete(cacheName);
-            }
-          }),
-      )),
+    caches.keys().then((cacheNames) => Promise.all(
+      cacheNames.map((cacheName) => {
+        if (cacheName.includes(NAME) && cacheName != CACHE_NAME) {
+          console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
+          return caches.delete(cacheName);
+        }
+      }),
+    )),
   );
 });

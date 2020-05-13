@@ -2,12 +2,14 @@
   font-family: 'Montserrat';
   font-weight: normal;
   src: url(/assets/fonts/Montserrat-Regular.ttf);
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Montserrat';
   font-weight: bold;
   src: url(/assets/fonts/Montserrat-Bold.ttf);
+  font-display: swap;
 }
 
 * {

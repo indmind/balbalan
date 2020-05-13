@@ -119,8 +119,9 @@ class TeamDetail extends HTMLElement {
         <div class="col s4"> 
           <img 
             class="materialboxed" width="100%"
-            src="${this._team.crestUrl}"
+            src="${this._team.crestUrl.replace(/^http:\/\//i, 'https://')}"
             alt="${this._team.shortName} Logo"
+            onerror="this.src = '/assets/images/icon.svg'"
           >
         </div>
         <div class="col s8">

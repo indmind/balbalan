@@ -63,7 +63,6 @@ class Navbar extends HTMLElement {
         <div class="user-view">
           <div class="background"></div>
           <p class="sidenav-title grey-text text-darken-4"><b>League</b></p>
-          <a href="#email"><span class="white-text email"></span></a>
         </div>
       </li>
       
@@ -127,7 +126,10 @@ class Navbar extends HTMLElement {
           </a>
 
           <ul class="topnav right hide-on-med-and-down">${this.nav}</ul>
-          <ul class="sidenav" id="nav-mobile">${this.nav}</ul>
+
+          <aside>
+            <ul class="sidenav" id="nav-mobile">${this.nav}</ul>
+          </aside>
         </div>
       </nav>
     `;

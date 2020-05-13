@@ -70,8 +70,9 @@ class TeamItem extends HTMLElement {
       <div class="col s12">
         <div class="team-item waves-effect">
           <img 
-            src="${this._team.team.crestUrl}"
+            src="${this._team.team.crestUrl.replace(/^http:\/\//i, 'https://')}"
             alt="${this._team.team.name} Logo"
+            onerror="this.src = '/assets/images/icon.svg'"
           >
           <div class="team-item-content">
             <span class="badge ${standColor} white-text">
