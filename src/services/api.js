@@ -1,7 +1,6 @@
-class ApiService {
+export default class ApiService {
   constructor() {
     this.API_ENDPOINT = 'https://api.football-data.org/v2/';
-    // this.API_ENDPOINT = "http://192.168.100.3:3000/"
   }
 
   async fetch(path, opts = {}) {

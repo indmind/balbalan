@@ -17,5 +17,10 @@
     "eslint": "^7.0.0",
     "eslint-config-google": "^0.14.0",
     "json-server": "^0.16.1"
+  },
+  "dependencies": {
+    "lib": "^4.1.4",
+    "regenerator-runtime": "^0.13.5",
+    "src": "^1.1.2"
   }
 }

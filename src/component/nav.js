@@ -1,3 +1,5 @@
+import {setPage} from '../utils/route';
+
 class Navbar extends HTMLElement {
   constructor() {
     super();
@@ -90,7 +92,7 @@ class Navbar extends HTMLElement {
 
         this._selectedLeague = target.dataset.value;
 
-        window.setPage(`league/${this._selectedLeague}`);
+        setPage(`league/${this._selectedLeague}`, true);
 
         if (this._changeEvent) {
           this._changeEvent(this._selectedLeague);

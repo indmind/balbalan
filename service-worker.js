@@ -54,6 +54,7 @@ const components = [
 
 const scripts = [
   'js/main.js',
+  'services/db.js',
   'services/api.js',
 ].map((script) => `/src/${script}`);
 

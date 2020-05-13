@@ -1,4 +1,14 @@
-!(() => {
+import template from './home.html';
+
+import {setPage} from '../../utils/route';
+import ApiService from '../../services/api';
+
+export default {
+  template,
+  created: run,
+};
+
+function run() {
   const api = new ApiService();
 
   const appNavbar = document.querySelector('app-navbar');
@@ -6,9 +16,8 @@
   const standingsContainer = document.querySelector('.row.standings');
   const cardBanner = document.querySelector('#banner-card');
 
-  let selectedTeam;
-
   updatePage();
+
   window.onhashchange = updatePage;
 
   appNavbar.onchange = (leagueId) => {
@@ -23,7 +32,7 @@
     let value = '2001';
 
     if (hrefPaths.length < 5) {
-      setPage(`${page}/${value}`);
+      setPage(`${page}/${value}`, true);
     } else {
       page = hrefPaths[hrefPaths.length - 2];
       value = hrefPaths[hrefPaths.length - 1];
@@ -32,23 +41,15 @@
     switch (page) {
       case 'league':
         loadStandings(value);
-
-        if (event) {
-          const lastUrlSegments = event.oldURL.split('/');
-
-          if (lastUrlSegments[lastUrlSegments.length - 2] === 'team') {
-            hideTeamInfo();
-          }
-        }
+        hideTeamInfo();
         break;
       case 'team':
         setTeamDetailData(value);
-        showTeamDetail();
+        showTeamDetail(true);
+        break;
+      default:
+        M.toast({html: `Page ${page} not found`});
     }
-  }
-
-  function onBackFromTeam() {
-    window.history.back();
   }
 
   function handleError(error) {
@@ -89,7 +90,7 @@
         const teamElement = document.createElement('team-item');
 
         teamElement.addEventListener('click',
-            (event) => onTeamClick(team, event),
+            () => onTeamClick(team),
         );
 
         teamElement.team = team;
@@ -101,13 +102,10 @@
     }
   }
 
-  function onTeamClick(team, {target: candidate}) {
-    const target = candidate.closest('team-item');
+  function onTeamClick(team) {
     const teamId = team.team.id;
 
-    window.setPage(`team/${teamId}`);
-
-    selectedTeam = target;
+    setPage(`team/${teamId}`);
 
     setTeamDetailData(teamId);
     showTeamDetail();
@@ -141,8 +139,12 @@
     }
   }
 
-  function showTeamDetail() {
-    appNavbar.backAction = onBackFromTeam;
+  function showTeamDetail(wait = false) {
+    const appNavbar = document.querySelector('app-navbar');
+
+    setTimeout(() => {
+      appNavbar.backAction = () => window.history.back();
+    }, wait ? 1 : 0);
 
     if (window.scrollY < 160) {
       cardBanner.classList.add('pre-info-only');
@@ -197,4 +199,4 @@
       }, 100);
     }, delay);
   }
-})();
+}
