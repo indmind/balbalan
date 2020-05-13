@@ -7,6 +7,7 @@
   "theme_color": "#00bfa5",
   "display": "standalone",
   "start_url": "/",
+  "gcm_sender_id": "173635432825",
   "icons": [
     {
       "src": "/assets/images/icons/icon-72x72.png",

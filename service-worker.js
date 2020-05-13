@@ -129,6 +129,28 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
+self.addEventListener('push', (event) => {
+  let body;
+
+  if (event.data) {
+    body = event.data.text();
+  } else {
+    body = 'No payload';
+  }
+
+  event.waitUntil(
+      self.registration.showNotification('Push Notification', {
+        body,
+        icon: '/assets/images/goal.svg',
+        vibrate: [100, 50, 100],
+        data: {
+          dateOfArrival: Date.now(),
+          primaryKey: 1,
+        },
+      }),
+  );
+});
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
       caches.keys().then((cacheNames) => Promise.all(
