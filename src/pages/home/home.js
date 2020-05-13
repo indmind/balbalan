@@ -99,6 +99,12 @@
         subvalue: `${teams.length} team${teams.length > 1 ? 's' : ''}`,
       });
 
+      if (teams.length <= 0) {
+        setEmptyVectorVisible(true);
+      } else {
+        setEmptyVectorVisible(false);
+      }
+
       standingsContainer.innerHTML = '';
 
       teams.forEach((team) => {
@@ -143,9 +149,17 @@
         ).toDateString(),
       });
 
+      const results = standings[0].table;
+
+      if (results.length <= 0) {
+        setEmptyVectorVisible(true);
+      } else {
+        setEmptyVectorVisible(false);
+      }
+
       standingsContainer.innerHTML = '';
 
-      standings[0].table.forEach((team) => {
+      results.forEach((team) => {
         const teamElement = document.createElement('team-item');
 
         teamElement.addEventListener('click',
@@ -293,5 +307,15 @@
     document.getElementById('badge').innerText = data.badge;
     document.getElementById('subname').innerText = data.subname;
     document.getElementById('subvalue').innerText = data.subvalue;
+  }
+
+  function setEmptyVectorVisible(state) {
+    const vector = document.querySelector('#empty-vector');
+
+    if (state) {
+      vector.classList.remove('hide');
+    } else {
+      vector.classList.add('hide');
+    }
   }
 })();

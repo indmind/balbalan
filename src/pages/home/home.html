@@ -15,6 +15,10 @@
     </div>
   </header>
 
+  <div id="empty-vector" class="center hide">
+    <img class="no-result" src="/assets/images/void.svg" alt="Empty">
+  </div>
+
   <article class="container team-info hide transparent">
     <!-- detail container -->
   </article>
@@ -36,11 +40,15 @@
     z-index: 2;
   }
 
-  .img-banner {
+  .img-banner, .no-result {
     height: 160px !important;
     max-width: 600px;
     padding-top: 1rem;
     margin: auto;
+  }
+
+  .no-result  {
+    margin-top: 2rem;
   }
 
   .card-title {

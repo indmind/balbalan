@@ -27,6 +27,7 @@ const styles = [
 const images = [
   'icon.svg',
   'goal.svg',
+  'void.svg',
 ].map((image) => `/assets/images/${image}`);
 
 const icons = [

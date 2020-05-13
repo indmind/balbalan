@@ -109,8 +109,6 @@ class TeamDetail extends HTMLElement {
       `;
     }
 
-    console.log(this._team);
-
     this.innerHTML = /* html*/`
       <style>
         ${this.styles}
