@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class ApiService {
   constructor() {
     this.API_ENDPOINT = 'https://api.football-data.org/v2/';

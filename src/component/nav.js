@@ -5,6 +5,8 @@ class Navbar extends HTMLElement {
     this.sidenavInstance = null;
     this._selectedLeague = '2001';
     this._changeEvent = null;
+    this._stared = false;
+    this._favoriteActive = false;
 
     this.styles = /* css*/`
       .sidenav {
@@ -39,6 +41,27 @@ class Navbar extends HTMLElement {
           padding: 1em 0px;
           position: fixed;
         }
+
+        nav ul a:hover {
+          background-color: transparent;
+        }
+
+        #stared-btn {
+          border: none;
+          width: 50px;
+          height: 50px;
+          border-radius: 10px;
+        }
+
+        #stared-btn.active {
+          background-color: white;
+          border-radius: 50%;
+        }
+
+        #stared-btn i {
+          line-height: normal;
+          height: auto;
+        }
       }
 
       @media only screen and (min-width: 600px) {
@@ -47,15 +70,27 @@ class Navbar extends HTMLElement {
           background-color: transparent !important;
         }
 
-        .brand-logo, .sidenav-trigger i, .sidenav-btn i {
+        .brand-logo, .sidenav-trigger i, .sidenav-btn i, .star-icon {
           color: #424242 !important;
         }
+      }
+
+      #stared-btn {
+        background-color: transparent;
+        border: none;
       }
 
       .nav-menu ul li a {
         color: #424242;
       }
 
+      .star-icon {
+        font-size: 2.5rem !important;
+      }
+
+      .star-icon.stared {
+        color: #ffca28 !important;
+      }
     `;
 
     this.nav = /* html*/`
@@ -80,7 +115,7 @@ class Navbar extends HTMLElement {
         document.querySelector('.sidenav'),
     );
 
-    this.setupClickListeners();
+    this.setupStarTogglerListener();
   }
 
   setupClickListeners() {
@@ -90,12 +125,24 @@ class Navbar extends HTMLElement {
 
         this._selectedLeague = target.dataset.value;
 
-        window.setPage(`league/${this._selectedLeague}`);
+        window.setPage(`league/${this._selectedLeague}`, true);
 
         if (this._changeEvent) {
           this._changeEvent(this._selectedLeague);
         }
       });
+    });
+
+    this.querySelector('#stared-btn')
+        .addEventListener('click',
+            () => this._onstarredclick(!this._favoriteActive),
+        );
+  }
+
+  setupStarTogglerListener() {
+    this.querySelector('#star-btn').addEventListener('click', () => {
+      this.toggleStar();
+      this._ontogglestar(this._stared);
     });
   }
 
@@ -125,7 +172,30 @@ class Navbar extends HTMLElement {
             <b>Balbalan!</b>
           </a>
 
-          <ul class="topnav right hide-on-med-and-down">${this.nav}</ul>
+          <ul class="right">
+            <a
+              href="javascript:void(0)"
+              class="${this._backAction ? '' : 'hide'}"
+              id="star-btn">
+              <i class="star-icon teal-text material-icons
+                ${this._stared ? 'stared' : ''}">
+                ${this._stared ? 'star' : 'star_border'}
+              </i>
+            </a>
+            
+            <button
+              class="waves-effect ${this._backAction ? 'hide' : ''}" 
+              id="stared-btn">
+              <i class="teal-text material-icons">
+                featured_play_list
+              </i>
+            </button>
+          </ul>
+
+          <ul class="topnav right hide-on-med-and-down 
+                    ${this._backAction ? 'hide' : ''}">
+              ${this.nav}
+          </ul>
 
           <aside>
             <ul class="sidenav" id="nav-mobile">${this.nav}</ul>
@@ -133,6 +203,36 @@ class Navbar extends HTMLElement {
         </div>
       </nav>
     `;
+
+    this.setupClickListeners();
+  }
+
+  toggleStar() {
+    this._stared = !this._stared;
+
+    this.updateStar();
+  }
+
+  setStarVisible(state) {
+    const starIcon = document.querySelector('.star-icon');
+
+    if (state) {
+      starIcon.classList.remove('hide');
+    } else {
+      starIcon.classList.add('hide');
+    }
+  }
+
+  updateStar() {
+    const starIcon = document.querySelector('.star-icon');
+
+    if (this._stared) {
+      starIcon.innerHTML = 'star';
+      starIcon.classList.add('stared');
+    } else {
+      starIcon.innerHTML = 'star_border';
+      starIcon.classList.remove('stared');
+    }
   }
 
   set backAction(action) {
@@ -143,17 +243,45 @@ class Navbar extends HTMLElement {
       this.sidenavInstance = M.Sidenav.init(
           this.querySelector('.sidenav'),
       );
-
-      this.setupClickListeners();
       return;
     }
 
-
+    this.setStarVisible(false);
     this.querySelector('.sidenav-btn').addEventListener('click', action);
   }
 
   set onchange(event) {
     this._changeEvent = event;
+  }
+
+  set onstarredclick(event) {
+    this._onstarredclick = event;
+  }
+
+  set ontogglestar(event) {
+    this._ontogglestar = event;
+    this.setupStarTogglerListener();
+  }
+
+  set stared(value) {
+    this._stared = value;
+    this.updateStar();
+  }
+
+  get stared() {
+    return this._stared;
+  }
+
+  set favoriteActive(value) {
+    const staredButton = document.getElementById('stared-btn');
+
+    this._favoriteActive = value;
+
+    if (this._favoriteActive) {
+      staredButton.classList.add('active');
+    } else {
+      staredButton.classList.remove('active');
+    }
   }
 }
 

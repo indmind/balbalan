@@ -1,16 +1,3 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      await navigator.serviceWorker.register('/service-worker.js');
-      console.log('Pendaftaran sw berhasil');
-    } catch (e) {
-      console.log('Pendaftaran sw gagal');
-    }
-  });
-} else {
-  console.log('sw tidak didukung');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.hash.substr(1).split('/')[0];
 
@@ -18,9 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // eslint-disable-next-line no-unused-vars
-function setPage(page) {
+function setPage(page, replace = false) {
   if (history.pushState) {
-    window.history.pushState(
+    window.history[replace ? 'replaceState': 'pushState'](
         {urlPath: `/#/${page}`},
         '',
         `/#/${page}`,

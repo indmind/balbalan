@@ -63,6 +63,23 @@ class TeamItem extends HTMLElement {
       case 3: standColor = 'brown lighten-1'; break;
     }
 
+    const teamDetail = /* html*/`
+      <div>
+        <span class="stat teal-text">
+          ${this._team.won}<span>won</span>
+        </span>
+        <span class="stat orange-text">
+          ${this._team.draw}<span>draw</span>
+        </span>
+        <span class="stat red-text">
+          ${this._team.lost}<span>lost</span>
+        </span>
+        <span class="badge stat">
+          ${this._team.points}<span>pts</span>
+        </span>
+      </div>
+    `;
+
     this.innerHTML = /* html*/`
       <style>
         ${this.styles}
@@ -76,24 +93,16 @@ class TeamItem extends HTMLElement {
           >
           <div class="team-item-content">
             <span class="badge ${standColor} white-text">
-              ${this._team.position}
+              ${this._team.position || this._team.team.tla}
             </span>
-            <span>${this._team.team.name}d</span>
-            <hr>
-            <div>
-              <span class="stat teal-text">
-                ${this._team.won}<span>won</span>
-              </span>
-              <span class="stat orange-text">
-                ${this._team.draw}<span>draw</span>
-              </span>
-              <span class="stat red-text">
-                ${this._team.lost}<span>lost</span>
-              </span>
-              <span class="badge stat">
-                ${this._team.points}<span>pts</span>
-              </span>
-            </div>
+            <span>${this._team.team.name}</span>
+          <hr>
+            ${this._team.position ?
+                teamDetail :
+                `
+                  <b>${this._team.team.activeCompetitions.length}</b>
+                  Active Vompetitions
+                `}
           </div>
         </div>
       </div>

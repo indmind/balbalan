@@ -6,9 +6,12 @@
     </div>
 
     <div class="card-content white-text">
-      <span class="card-title truncate" id="league">UEFA Champions League</span>
-      <p><span id="subname">End</span> <b id="subvalue">Tue Jun 25 2019</b> <span id="area"
-          class="badge white">Europe</span></p>
+      <span class="card-title truncate" id="title"></span>
+      <p>
+        <span id="subname"></span>
+        <b id="subvalue"></b>
+        <span id="badge" class="badge white hide"></span>
+      </p>
     </div>
   </header>
 
@@ -83,6 +86,10 @@
       padding: 1rem;
       margin: auto;
     }
+
+    .container.team-info {
+      margin-top: 2rem;
+    }
   }
 
   @media only screen and (max-width: 600px) {
@@ -115,9 +122,9 @@
       opacity: 0;
       /* transition: none; */
     }
-  }
 
-  .container.team-info {
-    margin-top: 110px;
+    .container.team-info {
+      margin-top: 110px;
+    }
   }
 </style>

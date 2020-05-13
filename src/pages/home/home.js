@@ -1,12 +1,16 @@
-!(() => {
+!(async () => {
+  const DEFAULT_PAGE = 'league';
+  const DEFAULT_VALUE = '2001';
+
   const api = new ApiService();
+  const db = new DatabaseService();
+
+  await db.init();
 
   const appNavbar = document.querySelector('app-navbar');
   const teamInfoContainer = document.querySelector('.container.team-info');
   const standingsContainer = document.querySelector('.row.standings');
   const cardBanner = document.querySelector('#banner-card');
-
-  let selectedTeam;
 
   updatePage();
   window.onhashchange = updatePage;
@@ -15,18 +19,30 @@
     loadStandings(leagueId);
   };
 
+  appNavbar.onstarredclick = (state) => {
+    if (state) {
+      window.setPage(`favorites`, true);
+      loadFavorite();
+    } else {
+      window.setPage(`${DEFAULT_PAGE}/${DEFAULT_VALUE}`, true);
+      loadStandings(DEFAULT_VALUE);
+    }
+
+    appNavbar.favoriteActive = state;
+  };
+
   function updatePage(event) {
     const hrefPaths = window.location.href.split('/');
 
     //  default page and value
-    let page = 'league';
-    let value = '2001';
+    let page = DEFAULT_PAGE;
+    let value = DEFAULT_VALUE;
 
     if (hrefPaths.length < 5) {
-      setPage(`${page}/${value}`);
+      window.setPage(`${page}/${value}`, true);
     } else {
-      page = hrefPaths[hrefPaths.length - 2];
-      value = hrefPaths[hrefPaths.length - 1];
+      page = hrefPaths[4];
+      value = hrefPaths[5];
     }
 
     switch (page) {
@@ -44,6 +60,15 @@
       case 'team':
         setTeamDetailData(value);
         showTeamDetail();
+      case 'favorites':
+        loadFavorite();
+        if (event) {
+          const lastUrlSegments = event.oldURL.split('/');
+
+          if (lastUrlSegments[lastUrlSegments.length - 2] === 'team') {
+            hideTeamInfo();
+          }
+        }
     }
   }
 
@@ -63,6 +88,39 @@
     return M.toast({html: error.message});
   }
 
+  async function loadFavorite() {
+    try {
+      const teams = await db.getAllTeams();
+
+      setBannerData({
+        title: 'Favorite Teams',
+        badge: null,
+        subname: 'You have favored',
+        subvalue: `${teams.length} team${teams.length > 1 ? 's' : ''}`,
+      });
+
+      standingsContainer.innerHTML = '';
+
+      teams.forEach((team) => {
+        const teamElement = document.createElement('team-item');
+
+        const data = {team};
+
+        teamElement.addEventListener('click',
+            () => onTeamClick(data, true),
+        );
+
+        teamElement.team = data;
+
+        standingsContainer.appendChild(teamElement);
+      });
+
+      appNavbar.favoriteActive = true;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async function loadStandings(leagueId) {
     try {
       const {
@@ -76,12 +134,14 @@
         handleError(error);
       }
 
-      document.getElementById('league').innerText = competition.name;
-      document.getElementById('area').innerText = competition.area.name;
-      document.getElementById('subname').innerText = 'Ends';
-      document.getElementById('subvalue').innerText = new Date(
-          season.endDate,
-      ).toDateString();
+      setBannerData({
+        title: competition.name,
+        badge: competition.area.name,
+        subname: 'Ends',
+        subvalue: new Date(
+            season.endDate,
+        ).toDateString(),
+      });
 
       standingsContainer.innerHTML = '';
 
@@ -89,51 +149,76 @@
         const teamElement = document.createElement('team-item');
 
         teamElement.addEventListener('click',
-            (event) => onTeamClick(team, event),
+            () => onTeamClick(team),
         );
 
         teamElement.team = team;
 
         standingsContainer.appendChild(teamElement);
       });
+
+      appNavbar.favoriteActive = false;
     } catch (error) {
       handleError(error);
     }
   }
 
-  function onTeamClick(team, {target: candidate}) {
-    const target = candidate.closest('team-item');
+  function onTeamClick(team, useSave = false) {
     const teamId = team.team.id;
 
     window.setPage(`team/${teamId}`);
 
-    selectedTeam = target;
-
-    setTeamDetailData(teamId);
+    setTeamDetailData(teamId, useSave);
     showTeamDetail();
-
-    document.getElementById('league').innerText = team.team.name;
   }
 
-  async function setTeamDetailData(teamId) {
+  async function setTeamDetailData(teamId, useSave = false) {
     try {
       const teamDetailElement = document.createElement('team-detail');
 
       teamInfoContainer.innerHTML = '';
       teamInfoContainer.appendChild(teamDetailElement);
 
-      const team = await api.getTeam(teamId);
+      let team;
 
-      if (team.error) {
-        handleError(team.error);
+      if (useSave) {
+        team = await db.getTeam(teamId);
+      } else {
+        team = await api.getTeam(teamId);
+
+        if (team.error) {
+          handleError(team.error);
+        }
       }
 
-      document.getElementById('league').innerText = team.name;
-      document.getElementById('area').innerText = team.area.name;
-      document.getElementById('subname').innerText = 'Updated';
-      document.getElementById('subvalue').innerText = new Date(
-          team.lastUpdated,
-      ).toDateString();
+      setBannerData({
+        title: team.name,
+        badge: team.area.name,
+        subname: 'Updated',
+        subvalue: new Date(
+            team.lastUpdated,
+        ).toDateString(),
+      });
+
+      const savedTeam = await db.getTeam(team.id);
+
+      if (savedTeam) {
+        appNavbar.stared = true;
+      } else {
+        appNavbar.stared = false;
+      }
+
+      appNavbar.setStarVisible(true);
+
+      appNavbar.ontogglestar = async (state) => {
+        if (state) {
+          await db.upsertTeam(team);
+          M.toast({html: `${team.shortName} added to favorite`});
+        } else {
+          await db.deleteTeam(team.id);
+          M.toast({html: `${team.shortName} removed from favorite`});
+        }
+      };
 
       teamDetailElement.team = team;
     } catch (error) {
@@ -178,7 +263,6 @@
       cardBanner.classList.remove('pre-info-only');
       delay = 0;
     } else {
-      console.log('with transition');
       cardBanner.classList.add('with-transition');
     }
 
@@ -196,5 +280,18 @@
         standingsContainer.classList.remove('transparent');
       }, 100);
     }, delay);
+  }
+
+  function setBannerData(data) {
+    if (data.badge) {
+      document.getElementById('badge').classList.remove('hide');
+    } else {
+      document.getElementById('badge').classList.add('hide');
+    }
+
+    document.getElementById('title').innerText = data.title;
+    document.getElementById('badge').innerText = data.badge;
+    document.getElementById('subname').innerText = data.subname;
+    document.getElementById('subvalue').innerText = data.subvalue;
   }
 })();

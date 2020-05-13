@@ -1,5 +1,5 @@
 const NAME = 'firstpwa';
-const VERSION = 2;
+const VERSION = 1;
 
 const CACHE_NAME = `${NAME}-${VERSION}`;
 
@@ -54,6 +54,8 @@ const components = [
 
 const scripts = [
   'js/main.js',
+  'js/registerServiceWorker.js',
+  'services/db.js',
   'services/api.js',
 ].map((script) => `/src/${script}`);
 
@@ -74,14 +76,13 @@ const urlsToCache = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(
-      (cache) => cache.addAll(urlsToCache),
-    ),
+      caches.open(CACHE_NAME).then(
+          (cache) => cache.addAll(urlsToCache),
+      ),
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  // const API_ENDPOINT = "http://192.168.100.3:3000/"
   const API_ENDPOINT = 'https://api.football-data.org/v2/';
 
   if (!(event.request.url.indexOf('http') === 0)) {
@@ -91,53 +92,51 @@ self.addEventListener('fetch', (event) => {
   if (event.request.url.includes(API_ENDPOINT)) {
     // Stale While Revalidate
     event.respondWith(
-      caches.open(CACHE_NAME).then((cache) =>
-        cache.match(event.request).then((response) => {
-          const fetchResponse = fetch(event.request).then((netResponse) => {
-            if (netResponse.ok) {
-              cache.put(event.request, netResponse.clone());
-            }
+        caches.open(CACHE_NAME).then((cache) =>
+          cache.match(event.request).then((response) => {
+            const fetchResponse = fetch(event.request).then((netResponse) => {
+              if (netResponse.ok) {
+                cache.put(event.request, netResponse.clone());
+              }
 
-            return netResponse;
-          });
+              return netResponse;
+            });
 
-          return response || fetchResponse;
-        }),
-      ),
+            return response || fetchResponse;
+          }),
+        ),
     );
   } else {
     // Cache First (Cache Fallback to Network)
     event.respondWith(
-      caches.match(event.request, {
-        ignoreSearch: true,
-        ignoreVary: true,
-      }).then(
-        (response) => {
-          if (response) return response;
+        caches.match(event.request, {
+          ignoreSearch: true,
+          ignoreVary: true,
+        }).then(
+            (response) => {
+              if (response) return response;
 
-          console.log('not using cache', event.request.url);
-
-          return caches.open(CACHE_NAME).then(
-            (cache) => fetch(event.request).then((netResponse) => {
-              cache.put(event.request, netResponse.clone());
-              return netResponse;
-            }),
-          );
-        },
-      ),
+              return caches.open(CACHE_NAME).then(
+                  (cache) => fetch(event.request).then((netResponse) => {
+                    cache.put(event.request, netResponse.clone());
+                    return netResponse;
+                  }),
+              );
+            },
+        ),
     );
   }
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => Promise.all(
-      cacheNames.map((cacheName) => {
-        if (cacheName.includes(NAME) && cacheName != CACHE_NAME) {
-          console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
-          return caches.delete(cacheName);
-        }
-      }),
-    )),
+      caches.keys().then((cacheNames) => Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName.includes(NAME) && cacheName != CACHE_NAME) {
+              console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
+              return caches.delete(cacheName);
+            }
+          }),
+      )),
   );
 });
