@@ -1,0 +1,105 @@
+.card {
+  box-shadow: 0 5px 10px rgba(154, 160, 185, .025), 0 15px 40px rgba(166, 173, 201, .2);
+}
+
+#banner-card {
+  margin: 0;
+  border-radius: 0 0 0 40px;
+  z-index: 2;
+}
+
+.img-banner, .no-result {
+  height: 160px !important;
+  max-width: 600px;
+  padding-top: 1rem;
+  margin: auto;
+}
+
+.no-result  {
+  margin-top: 2rem;
+}
+
+.card-title {
+  width: 90%;
+}
+
+.card-content * {
+  transition: opacity 300ms ease-in-out;
+}
+
+.tabs .tab a:focus,
+.tabs .tab a:focus.active {
+  background-color: transparent;
+}
+
+/* TODO: delete this after create selector*/
+.badge {
+  border-radius: 20px;
+}
+
+stand-item {
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 600px) {
+  #banner-card {
+    width: 80%;
+    margin: 1rem auto;
+    border-radius: 20px;
+  }
+
+  #banner-card {
+    overflow: hidden;
+  }
+
+  .card-image {
+    float: right;
+  }
+
+  .img-banner {
+    width: 300px !important;
+    max-width: 600px;
+    padding: 1rem;
+    margin: auto;
+  }
+
+  .container.team-info {
+    margin-top: 2rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #banner-card {
+    position: sticky;
+    top: -110px;
+  }
+
+  #banner-card.pre-info-only {
+    position: fixed;
+    /* content padding-top */
+    top: 5rem;
+  }
+
+  #banner-card.pre-info-only.with-transition {
+    transition: all 300ms ease-in-out;
+  }
+
+  #banner-card.info-only {
+    position: fixed;
+    top: -110px;
+    transition: all 300ms ease-in-out;
+  }
+
+  .row.standings {
+    transition: opacity 200ms ease-in-out;
+  }
+
+  .transparent {
+    opacity: 0;
+    /* transition: none; */
+  }
+
+  .container.team-info {
+    margin-top: 110px;
+  }
+}

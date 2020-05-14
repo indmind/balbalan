@@ -17,14 +17,42 @@ function setPage(page, replace = false) {
   }
 }
 
-async function loadPage(page) {
+async function loadPage(pageName) {
   try {
+    const page = `src/pages/${pageName}/${pageName}`;
+
     await loadPageView(page);
     loadPageController(page);
   } catch (e) { }
 
+  async function loadPageView(page) {
+    const content = document.querySelector('#body-content');
+    const styleElement = document.createElement('link');
+
+    styleElement.type = 'text/css';
+    styleElement.rel = 'stylesheet';
+
+    try {
+      const response = await fetch(`${page}.html`);
+
+      if (response.ok) {
+        styleElement.href = `${page}.css`;
+        document.head.appendChild(styleElement);
+        content.innerHTML = await response.text();
+      } else {
+        content.innerHTML = await fetch('src/pages/404.html').then(
+            (response) => response.text(),
+        );
+      }
+    } catch (e) {
+      content.innerHTML = await fetch('src/pages/404.html').then(
+          (response) => response.text(),
+      );
+    }
+  }
+
   function loadPageController(page) {
-    const scriptLoc = `src/pages/${page}/${page}.js`;
+    const scriptLoc = `${page}.js`;
     const prevScript = document.getElementById('content-controller');
 
     if (prevScript) {
@@ -39,26 +67,6 @@ async function loadPage(page) {
     script.src = scriptLoc;
 
     document.body.appendChild(script);
-  }
-
-  async function loadPageView(page) {
-    const content = document.querySelector('#body-content');
-
-    try {
-      const response = await fetch(`src/pages/${page}/${page}.html`);
-
-      if (response.ok) {
-        content.innerHTML = await response.text();
-      } else {
-        content.innerHTML = await fetch('src/pages/404.html').then(
-            (response) => response.text(),
-        );
-      }
-    } catch (e) {
-      content.innerHTML = await fetch('src/pages/404.html').then(
-          (response) => response.text(),
-      );
-    }
   }
 }
 

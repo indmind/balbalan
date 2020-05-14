@@ -81,7 +81,7 @@
       return M.toast({
         html: 'Can\'t connect to the internet or API request limit reached',
       });
-    } else if (error.errorCode == 403) {
+    } else if (error.errorCode === 403) {
       return M.toast({html: '403 Cannot access the resource'});
     }
 
@@ -99,12 +99,7 @@
         subvalue: `${teams.length} team${teams.length > 1 ? 's' : ''}`,
       });
 
-      if (teams.length <= 0) {
-        setEmptyVectorVisible(true);
-      } else {
-        setEmptyVectorVisible(false);
-      }
-
+      setEmptyVectorVisible(teams.length <= 0);
       standingsContainer.innerHTML = '';
 
       teams.forEach((team) => {
@@ -151,11 +146,7 @@
 
       const results = standings[0].table;
 
-      if (results.length <= 0) {
-        setEmptyVectorVisible(true);
-      } else {
-        setEmptyVectorVisible(false);
-      }
+      setEmptyVectorVisible(results.length <= 0);
 
       standingsContainer.innerHTML = '';
 
@@ -187,6 +178,8 @@
   }
 
   async function setTeamDetailData(teamId, useSave = false) {
+    setEmptyVectorVisible(false);
+
     try {
       const teamDetailElement = document.createElement('team-detail');
 
@@ -214,13 +207,7 @@
         ).toDateString(),
       });
 
-      const savedTeam = await db.getTeam(team.id);
-
-      if (savedTeam) {
-        appNavbar.stared = true;
-      } else {
-        appNavbar.stared = false;
-      }
+      appNavbar.stared = useSave || await db.getTeam(team.id);
 
       appNavbar.setStarVisible(true);
 
