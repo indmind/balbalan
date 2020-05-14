@@ -101,7 +101,7 @@ class TeamItem extends HTMLElement {
                 teamDetail :
                 `
                   <b>${this._team.team.activeCompetitions.length}</b>
-                  Active Vompetitions
+                  Active Competitions
                 `}
           </div>
         </div>

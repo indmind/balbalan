@@ -11,10 +11,10 @@ webPush.setVapidDetails(
 
 // digunakan untuk menentukan client
 const pushSubscription = {
-  'endpoint': 'https://fcm.googleapis.com/fcm/send/fhNy5TtFKGo:APA91bFpiVj_H2mMMGldgnZAWIKP-FNPTNw80I4XxOgNGXhDg0b0lxk1AdrdluAX3gl9koYpxccl7WFYOwmgiGani3uhCot2HqobKh7wbwKo8w_hMF-r7Nu4hQ-iThINXIafu_k4-UJY',
+  'endpoint': 'https://fcm.googleapis.com/fcm/send/ek_lH3QKHlY:APA91bHujEnhBdTPATpNCRoDtwv-dPpRAa04MR4MymiKNkJkyzABA7DaTIiyP02F4HtXcR_yxG4mvMIqPVsHe55nyV7Pp7XLhf53OCkwdoYMqg0fTgunbx5WLHEuHQ24EuB3QpQRJUAl',
   'keys': {
-    'p256dh': 'BFhrsFyIz00dzDa1GANinNTIR0coBpmZ4qM53nN9NabJdqhV4Jg7frLpDUPhNL/cvZXyNpxx27B9mMmVRRdBLp4=',
-    'auth': 'GOYaz+w6nQZ+HwlkQNvD7A==',
+    'p256dh': 'BC+4v78ZsIv/XZSr1Gc+1ooWNUsNCrWf3mcIOFSdaSbjIC7ITyZPdDsAIv77GvspCGSt6T3h/LtYjOwJrNLvaH8=',
+    'auth': '2vM7AjPagMqpX5+Olkufeg==',
   },
 };
 

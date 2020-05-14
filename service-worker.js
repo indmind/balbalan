@@ -1,4 +1,4 @@
-const NAME = 'firstpwa';
+const NAME = 'balbalan';
 const VERSION = 1;
 
 const CACHE_NAME = `${NAME}-${VERSION}`;

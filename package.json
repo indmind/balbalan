@@ -8,15 +8,13 @@
   },
   "scripts": {
     "lint": "eslint . --fix",
-    "serve": "http-server .",
-    "serve:server": "json-server --host 0.0.0.0 --watch mock-api.json"
+    "serve": "http-server ."
   },
   "author": "indmind",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^7.0.0",
     "eslint-config-google": "^0.14.0",
-    "json-server": "^0.16.1",
     "web-push": "^3.4.4"
   }
 }

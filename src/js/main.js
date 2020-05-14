@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // eslint-disable-next-line no-unused-vars
 function setPage(page, replace = false) {
   if (history.pushState) {
-    window.history[replace ? 'replaceState': 'pushState'](
+    window.history[replace ? 'replaceState' : 'pushState'](
         {urlPath: `/#/${page}`},
         '',
         `/#/${page}`,
@@ -76,20 +76,23 @@ async function requestNotificationPermission() {
     }
 
     if (('PushManager' in window)) {
-      navigator.serviceWorker.getRegistration().then(function(registration) {
-        registration.pushManager.subscribe({
+      const registration = await navigator.serviceWorker.getRegistration();
+
+      try {
+        const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
+          // eslint-disable-next-line max-len
           applicationServerKey: 'BFmj0gnaW_86Z3DwnEE4fA8UoqKroBNPrzjlFTMq48zu5JEYrGs6Ofi1HrPCVSubhqtuKW_UO-A88BLqTelAzjM',
-        }).then(function(subscribe) {
-          console.log('Berhasil melakukan subscribe dengan endpoint: ', subscribe.endpoint);
-          console.log('Berhasil melakukan subscribe dengan p256dh key: ', btoa(String.fromCharCode.apply(
-              null, new Uint8Array(subscribe.getKey('p256dh')))));
-          console.log('Berhasil melakukan subscribe dengan auth key: ', btoa(String.fromCharCode.apply(
-              null, new Uint8Array(subscribe.getKey('auth')))));
-        }).catch(function(e) {
-          console.error('Tidak dapat melakukan subscribe ', e.message);
         });
-      });
+
+        console.log('Endpoint: ', subscription.endpoint);
+        console.log('p256dh key: ', btoa(String.fromCharCode.apply(
+            null, new Uint8Array(subscription.getKey('p256dh')))));
+        console.log('auth key: ', btoa(String.fromCharCode.apply(
+            null, new Uint8Array(subscription.getKey('auth')))));
+      } catch (error) {
+        console.log('Tidak dapat melakukan subscribe ', error.message);
+      }
     }
   }
 }
